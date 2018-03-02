@@ -29,7 +29,7 @@ defmodule NinjaRMM.Request do
 
   defp authorization_header(date, verb, canonicalized_resource) do
     access_key = Config.get(:access_key_id, "")
-    secret_access_key = Config.get(:secret_access_key_id, "")
+    secret_access_key = Config.get(:secret_access_key, "")
 
     signature =
       :sha
