@@ -1,12 +1,12 @@
 defmodule NinjaRMM.Request do
   @moduledoc false
 
-  alias NinjaRMM.Response
+  alias NinjaRMM.{Config, Response}
 
   def process(method, endpoint) do
     method_string = method |> Atom.to_string() |> String.upcase()
 
-    ninja_api_url = Application.get_env(:ninjarmm, :url, "https://api.ninjarmm.com")
+    ninja_api_url = Config.get(:url, "https://api.ninjarmm.com")
 
     with {:ok, now} <- get_rfc2616_date(),
          {:ok, header} <- authorization_header(now, method_string, endpoint),
@@ -28,8 +28,8 @@ defmodule NinjaRMM.Request do
   end
 
   defp authorization_header(date, verb, canonicalized_resource) do
-    access_key = Application.get_env(:ninjarmm, :access_key_id, "")
-    secret_access_key = Application.get_env(:ninjarmm, :secret_access_key_id, "")
+    access_key = Config.get(:access_key_id, "")
+    secret_access_key = Config.get(:secret_access_key_id, "")
 
     signature =
       :sha
